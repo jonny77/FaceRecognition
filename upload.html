@@ -1,0 +1,19 @@
+<div class="container sadrzaj">
+
+    <form id="uploadImage" class="form-signin" action="upload.php" method="post" enctype="multipart/form-data">
+        <div class="img-upload">
+            <img src="img/photo.png" class="img img-thumbnail" id="uploadingPhoto">
+        </div>
+        <div class="fileUpload btn btn-info">
+            <span>Izaberi sliku</span>
+            <input type="file"  name="file" id="fileToUpload" class="upload" />
+        </div>
+        <input class="btn btn-default" type="submit" value="Pronađi slike" name="pronadjiSlike">
+
+    </form>
+        <?php
+            echo $url;
+        ?>
+    <div id="img-info">
+    </div>
+</div>

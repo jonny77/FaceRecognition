@@ -1,0 +1,56 @@
+<h1 style="text-align: center;color: #ffffff; background: linear-gradient(to bottom,#337ab7 0,#265a88 100%);padding: 15px 0;">Face Recognition</h1>
+<div class="container sadrzaj">
+    <form class="form-signin" method="post" action="index.php">
+        <h2 class="form-signin-heading">Prijavite se</h2>
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user"></span> </span>
+            <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email adresa" aria-describedby="basic-addon1" required>
+        </div>
+        <div id="message-line"></div>
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon2"><span class="glyphicon glyphicon-lock"></span> </span>
+            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2" required>
+        </div>
+        <input name="login" class="btn btn-success btn-block" type="submit" value="Prijava">
+        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#myModal">
+            Niste registrovani?
+        </button>
+    </form>
+
+</div> <!-- /container -->
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Registrujte se</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-register" method="post" action="index.php">
+                    <div class="input-group">
+                        <label for="regIme">Ime</label>
+                        <input type="text" id="regIme" name="ime" class="form-control" placeholder="Ime" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="regPrezime">Prezime</label>
+                        <input type="text" id="regPrezime" name="prezime" class="form-control" placeholder="Prezime" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="regEmail">Email addresa</label>
+                        <input type="email" id="regEmail" name="email" class="form-control" placeholder="Email adresa" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="regPassword">Password</label>
+                        <input type="password" id="regPassword" name="password" class="form-control" placeholder="Password" required>
+                    </div>
+                    <div class="input-group">
+                        <button type="submit" class="btn btn-primary">Registracija</button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
