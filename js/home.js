@@ -1,3 +1,74 @@
+function displayImageInfo(data) {
+    //var div = $('#divInfo');
+    console.log("Success");
+    console.log(data);
+}
+function saveImageInfo(data) {
+    $.ajax({
+        url: " saveImageInfo.php", // Url to which the request is send
+        type: "POST",             // Type of request to be send, called as method
+        data: data, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
+        success: function(data)   // A function to be called if request succeeds
+        {
+            displayImageInfo(data);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert("Greška.");
+        }
+    });
+}
+function getImageInfo(data) {
+    //var response = JSON.parse(data);
+    var response = data;
+    var request = {};
+    request['api_key'] = "d45fd466-51e2-4701-8da8-04351c872236";
+    request['api_secret'] = "171e8465-f548-401d-b63b-caf0dc28df5f";
+    request['img_uid'] = response['img_uid'];
+    request = JSON.stringify(request);
+    $.ajax({
+        crossDomain: true,
+        url: " http://www.betafaceapi.com/service_json.svc/GetImageInfo", // Url to which the request is send
+        type: "POST",             // Type of request to be send, called as method
+        data: request, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
+        contentType:"application/json",
+        dataType:"json",
+        success: function(data)   // A function to be called if request succeeds
+        {
+            saveImageInfo(data);
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert("Greška.");
+        }
+    });
+}
+function uploadImageApi(data) {
+    var response = JSON.parse(data);
+    var request = {};
+    request['api_key'] = "d45fd466-51e2-4701-8da8-04351c872236";
+    request['api_secret'] = "171e8465-f548-401d-b63b-caf0dc28df5f";
+    request['detection_flags'] = "";
+    //request['image_url'] = response['image_url'];
+    request['image_url'] = "https://upload.wikimedia.org/wikipedia/commons/5/51/Brad_Pitt_Fury_2014.jpg";
+    request['original_filename'] = response['original_filename'];
+    request = JSON.stringify(request);
+    //console.log(request);
+    $.ajax({
+        crossDomain: true,
+        url: " http://www.betafaceapi.com/service_json.svc/UploadNewImage_Url", // Url to which the request is send
+        type: "POST",             // Type of request to be send, called as method
+        data: request, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
+        contentType:"application/json",
+        dataType:"json",
+        success: function(data)   // A function to be called if request succeeds
+        {
+            console.log(data);
+            getImageInfo(data)
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            alert("Greška.");
+        }
+    });
+}
 $(document).ready(function(){ //prevent any code from running before the document is finished loading
     $('#message-line').popover({title:"Greška", content:"Pogrešni podaci.", placement:"right", trigger:"manual"}); //priprema gresku za id=message-line
     if($('#fileToUpload').length>0){
@@ -35,6 +106,8 @@ $(document).ready(function(){ //prevent any code from running before the documen
             processData:false,        // To send DOMDocument or non processed data file it is set to false
             success: function(data)   // A function to be called if request succeeds
             {
+                console.log(data);
+                uploadImageApi(data);
                 window.setTimeout(function(){
                     $('.loading-img').remove();
                 }, 2000);

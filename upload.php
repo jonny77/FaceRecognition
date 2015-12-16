@@ -4,6 +4,7 @@ require_once 'Klase/KorisnikDao.php';
 require_once 'Klase/Korisnik.php';
 require_once 'Klase/SlikaDao.php';
 require_once 'Klase/Slika.php';
+
 if(isset($_FILES["file"]["type"]))
 {
     $validextensions = array("jpeg", "jpg", "png");
@@ -23,38 +24,7 @@ if(isset($_FILES["file"]["type"]))
             }
             else
             {
-                $sourcePath = $_FILES['file']['tmp_name']; // Storing source path of the file in a variable
-                $targetPath = "uploads/".$_FILES['file']['name']; // Target path where file is to be stored
-                move_uploaded_file($sourcePath,$targetPath) ; // Moving Uploaded file
-
-               /* echo "<span id='success'>Image Uploaded Successfully...!!</span><br/>";
-                echo "<br/><b>File Name:</b> " . $_FILES["file"]["name"] . "<br>";
-                echo "<b>Type:</b> " . $_FILES["file"]["type"] . "<br>";
-                echo "<b>Size:</b> " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
-                echo "<b>Temp file:</b> " . $_FILES["file"]["tmp_name"] . "<br>";*/
-                //snimanje u bazu
-                session_start();
-                $slika= new Slika();
-
-                $slika->setKorisnikId($_SESSION['korisnikId']);
-                $slika->setUrl($targetPath);
-                $slika->setVelicina($_FILES["file"]["size"]);
-
-                $slika->setFormat($file_extension);
-                list($duzina,$sirina)=getimagesize($targetPath);
-                $slika->setDuzina($duzina);
-                $slika->setSirina($sirina);
-                $sdao=new \Dao\SlikaDao();
-                $sdao->create($slika);
-                $id=$slika->getIdSlike();
-                echo "$id";
-                /*echo "ID korisnika je $slika->getKorisnikId()";
-                echo "URL slike je $slika->getUrl()";
-                echo "Velicina slike je $slika->getVelicina()";
-                echo "Format slike je $slika->getFormat()";
-                echo "Duzina slike je $slika->getDuzina()";
-                echo "Sirina slike je $slika->getSirina()";*/
-
+                savePhoto($file_extension);
              }
         }
     }
@@ -63,4 +33,43 @@ if(isset($_FILES["file"]["type"]))
         echo "<span id='invalid'>***Invalid file Size or Type***<span>";
     }
 }
+function savePhoto($file_extension)
+{
+    try {
+        $sourcePath = $_FILES['file']['tmp_name']; // Storing source path of the file in a variable
+        $hash = md5(time().$_FILES['file']['name']);
+        $fileName = $_FILES['file']['name'];
+        $_FILES['file']['name'] = $hash.".".$file_extension;
+        $targetPath = "uploads/" . $_FILES['file']['name']; // Target path where file is to be stored
+        move_uploaded_file($sourcePath, $targetPath); // Moving Uploaded file
+
+        //snimanje u bazu
+        session_start();
+        $slika = new Slika();
+
+        $slika->setKorisnikId($_SESSION['korisnikId']);
+        $slika->setUrl($targetPath);
+        $slika->setVelicina($_FILES["file"]["size"]);
+
+        $slika->setFormat($file_extension);
+        list($duzina, $sirina) = getimagesize($targetPath);
+        $slika->setDuzina($duzina);
+        $slika->setSirina($sirina);
+        $sdao = new \Dao\SlikaDao();
+        $sdao->create($slika);
+
+
+        //Informacije za servis FaceUpload
+        $info = array();
+        $info['image_url'] = $_SERVER['SERVER_NAME']."/".$targetPath;
+        $info['original_filename'] = $fileName;
+        echo json_encode($info);
+
+    } catch(Exception $e){
+        echo $e->getMessage();
+        echo $e->getTraceAsString();
+        die();
+    }
+}
+
 ?>

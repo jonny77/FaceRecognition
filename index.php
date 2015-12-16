@@ -16,7 +16,8 @@ if($logged) {
     require_once "meni.html";
     require_once "upload.html";
 
-} else
+} else {
     require_once "login.html";
+}
 require_once "footer.html";
 ?>
