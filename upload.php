@@ -56,13 +56,14 @@ function savePhoto($file_extension)
         $slika->setDuzina($duzina);
         $slika->setSirina($sirina);
         $sdao = new \Dao\SlikaDao();
-        $sdao->create($slika);
+        $id = $sdao->create($slika);
 
 
         //Informacije za servis FaceUpload
         $info = array();
         $info['image_url'] = $_SERVER['SERVER_NAME']."/".$targetPath;
         $info['original_filename'] = $fileName;
+        $info['id'] = $id;
         echo json_encode($info);
 
     } catch(Exception $e){

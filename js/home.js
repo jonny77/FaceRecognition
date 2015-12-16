@@ -3,9 +3,10 @@ function displayImageInfo(data) {
     console.log("Success");
     console.log(data);
 }
-function saveImageInfo(data) {
+function saveImageInfo(data, id) {
+    console.log("Save image: " +id);
     $.ajax({
-        url: " saveImageInfo.php", // Url to which the request is send
+        url: " saveImageInfo.php/"+id, // Url to which the request is send
         type: "POST",             // Type of request to be send, called as method
         data: data, // Data sent to server, a set of key/value pairs (i.e. form fields and values)
         success: function(data)   // A function to be called if request succeeds
@@ -17,7 +18,7 @@ function saveImageInfo(data) {
         }
     });
 }
-function getImageInfo(data) {
+function getImageInfo(data, id) {
     //var response = JSON.parse(data);
     var response = data;
     var request = {};
@@ -34,7 +35,7 @@ function getImageInfo(data) {
         dataType:"json",
         success: function(data)   // A function to be called if request succeeds
         {
-            saveImageInfo(data);
+            saveImageInfo(data, id);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             alert("Greška.");
@@ -48,7 +49,8 @@ function uploadImageApi(data) {
     request['api_secret'] = "171e8465-f548-401d-b63b-caf0dc28df5f";
     request['detection_flags'] = "";
     //request['image_url'] = response['image_url'];
-    request['image_url'] = "https://upload.wikimedia.org/wikipedia/commons/5/51/Brad_Pitt_Fury_2014.jpg";
+    //request['image_url'] = "https://upload.wikimedia.org/wikipedia/commons/5/51/Brad_Pitt_Fury_2014.jpg";
+    request['image_url'] = "http://www.mentalhealthy.co.uk/sites/default/files/Depositphotos_4780493_S.jpg";
     request['original_filename'] = response['original_filename'];
     request = JSON.stringify(request);
     //console.log(request);
@@ -61,8 +63,7 @@ function uploadImageApi(data) {
         dataType:"json",
         success: function(data)   // A function to be called if request succeeds
         {
-            console.log(data);
-            getImageInfo(data)
+            getImageInfo(data, response['id']);
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             alert("Greška.");
