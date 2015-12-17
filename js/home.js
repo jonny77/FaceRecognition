@@ -18,9 +18,9 @@ function saveImageInfo(data, id) {
         }
     });
 }
-function getImageInfo(data, id) {
+function getImageInfo(oldData, id) {
     //var response = JSON.parse(data);
-    var response = data;
+    var response = oldData;
     var request = {};
     request['api_key'] = "d45fd466-51e2-4701-8da8-04351c872236";
     request['api_secret'] = "171e8465-f548-401d-b63b-caf0dc28df5f";
@@ -35,22 +35,26 @@ function getImageInfo(data, id) {
         dataType:"json",
         success: function(data)   // A function to be called if request succeeds
         {
-            saveImageInfo(data, id);
+            if(parseInt(data['int_response']) == 1){
+                getImageInfo(oldData, id);
+            } else if(parseInt(data['int_response']) == 0) {
+                saveImageInfo(data, id);
+            }
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             alert("Greška.");
         }
     });
 }
-function uploadImageApi(data) {
-    var response = JSON.parse(data);
+function uploadImageApi(oldData) {
+    var response = JSON.parse(oldData);
     var request = {};
     request['api_key'] = "d45fd466-51e2-4701-8da8-04351c872236";
     request['api_secret'] = "171e8465-f548-401d-b63b-caf0dc28df5f";
     request['detection_flags'] = "";
     //request['image_url'] = response['image_url'];
     //request['image_url'] = "https://upload.wikimedia.org/wikipedia/commons/5/51/Brad_Pitt_Fury_2014.jpg";
-    request['image_url'] = "http://www.mentalhealthy.co.uk/sites/default/files/Depositphotos_4780493_S.jpg";
+    request['image_url'] = "http://celebritytoob.toobnetwork.com/wp-content/uploads/sites/5/2013/02/Celebrity_Twins_8-635x476.jpg";
     request['original_filename'] = response['original_filename'];
     request = JSON.stringify(request);
     //console.log(request);
