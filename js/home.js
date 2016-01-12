@@ -2,6 +2,12 @@ function displayImageInfo(data) {
     //var div = $('#divInfo');
     console.log("Success");
     console.log(data);
+    var images = JSON.parse(data);
+    var imagesDiv = $('#result-images');
+    imagesDiv.append("<div class='col-lg-1 col-md-1'></div>")
+    images.forEach(function(currentValue, index, array){
+        imagesDiv.append("<div class='col-lg-2 col-md-2'><img class='img-thumbnail' src='http://localhost/FaceRecognition/"+currentValue.url+"'></div>");
+    });
 }
 function saveImageInfo(data, id) {
     console.log("Save image: " +id);

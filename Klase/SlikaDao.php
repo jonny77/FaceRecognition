@@ -190,6 +190,50 @@ class SlikaDao implements IDaoCrud{
         }
     }
 
+    public function getFaces($godine, $rasa, $brada, $spol, $brkovi, $naocare){
+        try{
+            $sql = "select distinct slike.idSlike as id, slike.url as url".
+                    "from slike, lica".
+                    "where".
+                    "slike.idSlike=lica.idSlike and".
+                    "lica.godine = :godine and".
+                    "lica.rasa = :rasa and".
+                    "lica.brada = :brada and".
+                    "lica.spol = :spol and".
+                    "lica.brkovi = :brkovi and".
+                    "lica.naocare = :naocare and".
+                    "lica.godineSigurnost > 0.5 and".
+                    "lica.rasaSigurnost > 0.7 and".
+                    "lica.bradaSigurnost > 0.8 and".
+                    "lica.spolSigurnost > 0.8 and".
+                    "lica.brkoviSigurnost > 0.9 and".
+                    "lica.naocareSigurnost > 0.6".
+                    "order by lica.godineSigurnost desc".
+                    "limit 5";
+            $upit = $this->konekcija->prepare($sql);
+            $upit->bindParam(':godine', $godine);
+            $upit->bindParam(':rasa', $rasa);
+            $upit->bindParam(':brada', $brada);
+            $upit->bindParam(':spol', $spol);
+            $upit->bindParam(':brkovi', $brkovi);
+            $upit->bindParam(':naocare', $naocare);
+            $upit->execute();
+            $slike = array();
+            if($upit->rowCount()>0){
+                while ($row = $upit->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_NEXT)) {
+                    $slika = new \Slika();
+                    $slika->setIdSlike($row['id']);
+                    $slika->setUrl($row['url']);
+                    array_push($slike, $slika);
+                }
+            }
+            return $slike;
+        }
+        catch (PDOException $e) {
+            print $e->getMessage();
+        }
+    }
+
 }
 
 

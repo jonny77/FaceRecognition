@@ -121,4 +121,10 @@ input[type="file"]{
 .form-register > div > button{
     width: 100%;
 }
+#result-images{
+    padding: 30px 0 50px 0;
+}
+#result-images > div > img{
+    height: 150px;
+}
 
